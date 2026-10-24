@@ -19,10 +19,10 @@ export interface ILastMessagePreview {
 export interface IRoom extends Document {
   _id: mongoose.Types.ObjectId;
   type: RoomType;
-  name?: string;
+  name?: string | undefined;
   members: IRoomMember[];
-  directKey?: string;
-  lastMessage?: ILastMessagePreview;
+  directKey?: string | undefined;
+  lastMessage?: ILastMessagePreview | undefined;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -88,8 +88,8 @@ const RoomSchema = new Schema<IRoom>(
       type: [RoomMemberSchema],
       required: true,
       validate: [
-        (members: IRoomMember[]) => members.length >= 2,
-        "A room must have at least 2 members",
+        (members: IRoomMember[]) => members.length >= 1,
+        "A room must have at least 1 member",
       ],
     },
     directKey: {

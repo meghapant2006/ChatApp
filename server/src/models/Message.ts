@@ -5,6 +5,7 @@ export interface IMessage extends Document {
   roomId: mongoose.Types.ObjectId;
   senderId: mongoose.Types.ObjectId;
   content: string;
+  isEdited?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -25,6 +26,10 @@ const MessageSchema = new Schema<IMessage>(
       type: String,
       required: true,
       trim: true,
+    },
+    isEdited: {
+      type: Boolean,
+      default: false,
     },
   },
   {
