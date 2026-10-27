@@ -29,6 +29,14 @@ export const loginSchema = z.object({
     .min(1, "Password is required"),
 });
 
+export const googleAuthSchema = z.object({
+  idToken: z.string().min(1, "Google ID token is required").optional(),
+  code: z.string().min(1, "Authorization code is required").optional(),
+  redirectUri: z.string().optional(),
+}).refine((data) => data.idToken || data.code, {
+  message: "Either idToken or code must be provided",
+});
+
 export const createGroupSchema = z.object({
   name: z
     .string()

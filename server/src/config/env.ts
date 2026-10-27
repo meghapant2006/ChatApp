@@ -7,6 +7,8 @@ export const env = {
   clientUrl: process.env.CLIENT_URL || "http://localhost:3000",
   jwtSecret: process.env.JWT_SECRET || "fallback_secret_for_development_mode",
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "7d",
+  googleClientId: process.env.GOOGLE_CLIENT_ID || "",
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
 };
 
 if (!env.mongoUri) throw new Error("MONGODB_URI is not set");

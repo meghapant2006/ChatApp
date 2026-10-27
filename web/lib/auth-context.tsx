@@ -12,6 +12,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string, avatarUrl?: string) => Promise<void>;
+  loginWithGoogle: (payload: { idToken?: string; code?: string; redirectUri?: string }) => Promise<void>;
   logout: () => void;
   refreshUser: () => Promise<void>;
 }
@@ -63,6 +64,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     getSocket(res.token);
   };
 
+  const loginWithGoogle = async (payload: { idToken?: string; code?: string; redirectUri?: string }) => {
+    const res = await api.googleAuth(payload);
+    localStorage.setItem("chatly_token", res.token);
+    setToken(res.token);
+    setUser(res.user);
+    getSocket(res.token);
+  };
+
   const logout = () => {
     localStorage.removeItem("chatly_token");
     setToken(null);
@@ -88,6 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isLoading,
         login,
         register,
+        loginWithGoogle,
         logout,
         refreshUser,
       }}

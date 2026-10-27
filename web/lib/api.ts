@@ -48,6 +48,13 @@ export const api = {
     });
   },
 
+  async googleAuth(data: { idToken?: string; code?: string; redirectUri?: string }): Promise<{ token: string; user: User }> {
+    return request<{ token: string; user: User }>("/api/auth/google", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
   async getMe(): Promise<{ user: User }> {
     return request<{ user: User }>("/api/auth/me");
   },

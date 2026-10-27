@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
+import { initiateGoogleLogin } from "@/lib/google-auth";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -86,10 +87,12 @@ export default function RegisterPage() {
           <button
             type="button"
             onClick={() => {
-              setName("Google User");
-              setEmail("google.user@example.com");
-              setUsername("googleuser");
-              setPassword("password123");
+              setError(null);
+              try {
+                initiateGoogleLogin();
+              } catch (err: any) {
+                setError(err.message || "Failed to initiate Google sign up");
+              }
             }}
             className="group w-full py-2.5 px-4 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface transition-all duration-150 flex items-center justify-center gap-3 text-sm font-medium"
           >
