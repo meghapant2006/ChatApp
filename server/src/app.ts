@@ -17,10 +17,18 @@ const app = express();
 // Security HTTP headers
 app.use(helmet());
 
-// CORS configuration
+// CORS configuration - dynamic origin allowing any localhost port and configured client URL
+const isOriginAllowed = (origin: string | undefined): boolean => {
+  if (!origin) return true;
+  if (origin === env.clientUrl) return true;
+  return /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+};
+
 app.use(
   cors({
-    origin: [env.clientUrl, "http://localhost:3000"],
+    origin: (origin, callback) => {
+      callback(null, isOriginAllowed(origin));
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],

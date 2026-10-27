@@ -22,9 +22,17 @@ export type AppSocketServer = SocketIOServer<
 >;
 
 export function initSocketServer(httpServer: http.Server): AppSocketServer {
+  const isOriginAllowed = (origin: string | undefined): boolean => {
+    if (!origin) return true;
+    if (origin === env.clientUrl) return true;
+    return /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+  };
+
   const io: AppSocketServer = new SocketIOServer(httpServer, {
     cors: {
-      origin: [env.clientUrl, "http://localhost:3000"],
+      origin: (origin, callback) => {
+        callback(null, isOriginAllowed(origin));
+      },
       credentials: true,
     },
     pingTimeout: 20000,

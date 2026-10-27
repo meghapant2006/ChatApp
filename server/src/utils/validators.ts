@@ -48,6 +48,11 @@ export const addMemberSchema = z.object({
   userId: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid user ID"),
 });
 
+export const updateProfileSchema = z.object({
+  name: z.string().trim().min(2, "Name must be at least 2 characters").max(50).optional(),
+  avatarUrl: z.string().url("Invalid avatar URL").optional().or(z.literal("")),
+});
+
 export const sendMessageSchema = z.object({
   content: z
     .string()

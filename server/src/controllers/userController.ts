@@ -19,4 +19,19 @@ export class UserController {
       next(err);
     }
   }
+
+  static async updateProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      if (!req.user?.userId) {
+        throw new UnauthorizedError("Authentication required");
+      }
+      const user = await UserService.updateProfile(req.user.userId, req.body);
+      res.status(200).json({
+        status: "success",
+        data: { user },
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
