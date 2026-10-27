@@ -62,6 +62,28 @@ export class AuthController {
     }
   }
 
+  static async googleCallback(req: Request, res: Response, _next: NextFunction): Promise<void> {
+    const clientBase = env.clientUrl || "https://meghapantchatapp.vercel.app";
+    try {
+      const code = req.query.code as string;
+      const error = req.query.error as string;
+
+      if (error || !code) {
+        res.redirect(`${clientBase.replace(/\/$/, "")}/login?error=${encodeURIComponent(error || "Google authorization failed")}`);
+        return;
+      }
+
+      const host = req.get("host") || "";
+      const protocol = req.protocol === "https" || req.secure || req.get("x-forwarded-proto") === "https" ? "https" : "http";
+      const redirectUri = `${protocol}://${host}${req.baseUrl}${req.path}`;
+
+      const { token } = await AuthService.googleAuth({ code, redirectUri });
+      res.redirect(`${clientBase.replace(/\/$/, "")}/login?token=${encodeURIComponent(token)}`);
+    } catch (err: any) {
+      res.redirect(`${clientBase.replace(/\/$/, "")}/login?error=${encodeURIComponent(err.message || "Failed to exchange Google code")}`);
+    }
+  }
+
   static async getMe(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       if (!req.user?.userId) {

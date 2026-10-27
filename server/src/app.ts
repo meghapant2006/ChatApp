@@ -17,11 +17,13 @@ const app = express();
 // Security HTTP headers
 app.use(helmet());
 
-// CORS configuration - dynamic origin allowing any localhost port and configured client URL
+// CORS configuration - dynamic origin allowing localhost, Vercel deployments, and configured client URL
 const isOriginAllowed = (origin: string | undefined): boolean => {
   if (!origin) return true;
   if (origin === env.clientUrl) return true;
-  return /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+  if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return true;
+  if (/^https:\/\/[a-zA-Z0-9-]+\.vercel\.app$/.test(origin)) return true;
+  return false;
 };
 
 app.use(

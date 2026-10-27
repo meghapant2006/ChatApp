@@ -1,6 +1,12 @@
 export function initiateGoogleLogin(onError?: (msg: string) => void) {
-  const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+  const clientId =
+    process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
+    "783065147226-23tei2829471c17t5lsk6gngf48hmju2.apps.googleusercontent.com";
+  const apiUrl =
+    process.env.NEXT_PUBLIC_API_URL ||
+    (typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1"
+      ? "https://chatapp-bhua.onrender.com"
+      : "http://localhost:5000");
 
   if (clientId) {
     const redirectUri = `${window.location.origin}/login`;

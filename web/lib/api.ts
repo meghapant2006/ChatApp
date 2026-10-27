@@ -1,6 +1,10 @@
 import { User, Room, Message } from "./types";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1"
+    ? "https://chatapp-bhua.onrender.com"
+    : "http://localhost:5000");
 
 function getAuthToken(): string | null {
   if (typeof window === "undefined") return null;

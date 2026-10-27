@@ -21,10 +21,18 @@ function LoginForm() {
   // Check for Google OAuth callback parameters
   const code = searchParams.get("code");
   const authError = searchParams.get("error");
+  const tokenParam = searchParams.get("token");
 
   useEffect(() => {
     if (authError) {
       setError(`Google sign-in error: ${authError}`);
+      return;
+    }
+
+    if (tokenParam) {
+      setIsVerifyingGoogle(true);
+      localStorage.setItem("chatly_token", tokenParam);
+      window.location.href = "/chat";
       return;
     }
 

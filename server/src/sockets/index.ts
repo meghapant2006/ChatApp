@@ -25,7 +25,9 @@ export function initSocketServer(httpServer: http.Server): AppSocketServer {
   const isOriginAllowed = (origin: string | undefined): boolean => {
     if (!origin) return true;
     if (origin === env.clientUrl) return true;
-    return /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return true;
+    if (/^https:\/\/[a-zA-Z0-9-]+\.vercel\.app$/.test(origin)) return true;
+    return false;
   };
 
   const io: AppSocketServer = new SocketIOServer(httpServer, {
